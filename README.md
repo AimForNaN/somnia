@@ -10,7 +10,7 @@ npm install @truefusion/somnia --save
 
 ## API
 
-Basic syntax: `somnia(URL).METHOD(DATA, OPTIONS): Promise`
+Basic syntax: `somnia(URL, OPTIONS).METHOD(DATA, OPTIONS): Promise`
 
 ## Examples
 
