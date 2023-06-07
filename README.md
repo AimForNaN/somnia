@@ -10,7 +10,10 @@ npm install @truefusion/somnia --save
 
 ## API
 
-Basic syntax: `somnia(URL).METHOD(DATA, OPTIONS): Promise`
+Basic syntax: `somnia(URL, OPTIONS).METHOD(DATA, OPTIONS): Promise`
+
+**METHOD:** HTTP verb.<br>
+**OPTIONS:** [fetch](https://developer.mozilla.org/en-US/docs/Web/API/fetch#options) options.
 
 ## Examples
 
@@ -61,8 +64,6 @@ somnia('/posts')
     console.log(statusText);
 });
 ```
-
-You can also pass [fetch](https://developer.mozilla.org/en-US/docs/Web/API/fetch#options) options to `somnia`:
 
 ```javascript
 var posts = somnia('/blog/posts', fetchOptions);

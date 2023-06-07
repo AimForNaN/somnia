@@ -1,4 +1,4 @@
-import defaults from 'lodash-es/defaults';
+import defaults from 'lodash-es/defaultsDeep';
 import { joinURL, withQuery } from 'ufo';
 
 function isJson(headers) {
@@ -95,23 +95,23 @@ export default function somnia(url, opts) {
 		return somnia(u, o);
 	};
 
-	_.delete = function () {
-		return f('DELETE', url, opts);
+	_.delete = function (o = {}) {
+		return f('DELETE', url, defaults(o, opts));
 	};
-	_.get = function (params) {
-		return f('GET', url, params, opts);
-	};
-
-	_.patch = function (data) {
-		return f('PATCH', url, data, opts);
+	_.get = function (params, o = {}) {
+		return f('GET', url, params, defaults(o, opts));
 	};
 
-	_.post = function (data) {
-		return f('POST', url, data, opts);
+	_.patch = function (data, o = {}) {
+		return f('PATCH', url, data, defaults(o, opts));
 	};
 
-	_.put = function (data) {
-		return f('PUT', url, data, opts);
+	_.post = function (data, o = {}) {
+		return f('POST', url, data, defaults(o, opts));
+	};
+
+	_.put = function (data, o = {}) {
+		return f('PUT', url, data, defaults(o, opts));
 	};
 
 	_.toString = function () {
