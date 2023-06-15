@@ -41,11 +41,11 @@ test.describe('Basic Use', () => {
 		expect(result.data.json).toEqual({ test: 'test' });
 
 		var body = new FormData();
+		// var body = new URLSearchParams();
 		body.set('test', 'test');
 
 		result = await api.post(body);
 		expect(result.status).toEqual(200);
-		var values = Object.values(result.data.form);
-		expect(values[0]).toContain('"test"');
+		expect(result.data.form).toEqual({ test: 'test' });
 	});
 });

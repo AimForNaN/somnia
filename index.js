@@ -1,18 +1,23 @@
 import defaults from 'lodash-es/defaultsDeep';
 import { joinURL, withQuery } from 'ufo';
 
-function generateBoundary() {
-	var boundary = '--------------------------';
-	for (var i = 0; i < 24; i++) {
-		boundary += Math.floor(Math.random() * 10).toString(16);
+function defaultHeaders(data) {
+	var ret = {
+		accept: 'application/json',
+	};
+	var contentType = getContentTypeFromData(data);
+	if (contentType) {
+		ret['content-type'] = contentType;
 	}
-	return boundary;
-};
+	return ret;
+}
 
 function getContentTypeFromData(data) {
-	if (data instanceof FormData) {
-		return 'application/x-www-form-urlencoded';
-		return `multipart/form-data; boundary=${generateBoundary()}`;
+	switch (true) {
+		case data instanceof FormData:
+		case data instanceof URLSearchParams: {
+			return null;
+		}
 	}
 	return 'application/json';
 }
@@ -30,12 +35,7 @@ function f(method = 'GET', url = '/', data = null, opts = {}) {
 	method = String(method).toUpperCase();
 
 	opts.method = method;
-	opts.headers = new Headers(
-		defaults(opts.headers, {
-			'accept': 'application/json',
-			'content-type': getContentTypeFromData(data),
-		})
-	);
+	opts.headers = new Headers(defaults(opts.headers, defaultHeaders(data)));
 
 	if (data) {
 		switch (method) {
