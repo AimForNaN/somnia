@@ -1,6 +1,22 @@
 import defaults from 'lodash-es/defaultsDeep';
 import { joinURL, withQuery } from 'ufo';
 
+function generateBoundary() {
+	var boundary = '--------------------------';
+	for (var i = 0; i < 24; i++) {
+		boundary += Math.floor(Math.random() * 10).toString(16);
+	}
+	return boundary;
+};
+
+function getContentTypeFromData(data) {
+	if (data instanceof FormData) {
+		return 'application/x-www-form-urlencoded';
+		return `multipart/form-data; boundary=${generateBoundary()}`;
+	}
+	return 'application/json';
+}
+
 function isJson(headers) {
 	if (headers.has('content-type')) {
 		let ctype = headers.get('content-type');
@@ -17,7 +33,7 @@ function f(method = 'GET', url = '/', data = null, opts = {}) {
 	opts.headers = new Headers(
 		defaults(opts.headers, {
 			'accept': 'application/json',
-			'content-type': 'application/json',
+			'content-type': getContentTypeFromData(data),
 		})
 	);
 

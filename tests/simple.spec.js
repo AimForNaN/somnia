@@ -21,14 +21,31 @@ test.describe('Basic Use', () => {
 	});
 
 	test('GET request', async () => {
-		var api = somnia('http://example.com/');
+		var api = somnia('http://httpbin.org/get');
 		var result = await api.get();
 		expect(result.status).toEqual(200);
 	});
 
 	test('GET parameters', async () => {
-		var api = somnia('http://example.com/');
+		var api = somnia('http://httpbin.org/anything');
 		var result = await api.get({ test: 'test' });
-		expect(result.url).toEqual('http://example.com/?test=test');
+		expect(result.data.args).toEqual({ test: 'test' });
+	});
+
+	test('POST request', async () => {
+		var api = somnia('http://httpbin.org/anything');
+		var result = await api.post({
+			test: 'test',
+		});
+		expect(result.status).toEqual(200);
+		expect(result.data.json).toEqual({ test: 'test' });
+
+		var body = new FormData();
+		body.set('test', 'test');
+
+		result = await api.post(body);
+		expect(result.status).toEqual(200);
+		var values = Object.values(result.data.form);
+		expect(values[0]).toContain('"test"');
 	});
 });
