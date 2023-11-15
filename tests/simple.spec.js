@@ -1,10 +1,13 @@
 import { test, expect } from '@playwright/test';
+import fetch from 'node-fetch';
 import somnia from './../dist/somnia.js';
 
 // Start tests!
 test.describe('Basic Use', () => {
 	var root = new URL('/api', 'http://example.com');
-	var api = somnia(root);
+	var api = somnia(root, {
+		fetch,
+	});
 
 	test('somnia', async () => {
 		expect(String(api)).toEqual('http://example.com/api');
@@ -21,19 +24,25 @@ test.describe('Basic Use', () => {
 	});
 
 	test('GET request', async () => {
-		var api = somnia('http://httpbin.org/get');
+		var api = somnia('http://httpbin.org/get', {
+			fetch,
+		});
 		var result = await api.get();
 		expect(result.status).toEqual(200);
 	});
 
 	test('GET parameters', async () => {
-		var api = somnia('http://httpbin.org/anything');
+		var api = somnia('http://httpbin.org/anything', {
+			fetch,
+		});
 		var result = await api.get({ test: 'test' });
 		expect(result.data.args).toEqual({ test: 'test' });
 	});
 
 	test('POST request', async () => {
-		var api = somnia('http://httpbin.org/anything');
+		var api = somnia('http://httpbin.org/anything', {
+			fetch,
+		});
 		var result = await api.post({
 			test: 'test',
 		});

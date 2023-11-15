@@ -32,13 +32,14 @@ function isJson(headers) {
 }
 
 function f(method = 'GET', url = '/', data = null, opts = {}) {
-	method = String(method).toUpperCase();
+	var fetch = opts.fetch;
+	delete opts.fetch;
 
-	opts.method = method;
+	opts.method = String(method).toUpperCase();
 	opts.headers = new Headers(defaults(opts.headers, defaultHeaders(data)));
 
 	if (data) {
-		switch (method) {
+		switch (opts.method) {
 			case 'GET': {
 				url = withQuery(url, data);
 				break;
@@ -55,18 +56,12 @@ function f(method = 'GET', url = '/', data = null, opts = {}) {
 		}
 	}
 
-	var fetch = null;
-	if (typeof window != 'undefined') {
-		fetch = window.fetch;
-	} else if (
-		typeof process === 'object' &&
-		Object.prototype.toString.call(process) === '[object process]'
-	) {
-		fetch = (...args) =>
-			import('node-fetch').then(({ default: fetch }) => fetch(...args));
-	}
-
 	return new Promise((resolve, reject) => {
+		if (typeof fetch != 'function') {
+			reject('fetch is not a function!');
+			return;
+		}
+
 		fetch(url, opts)
 			.then((rsp) => {
 				var { headers, ok, status, statusText, url } = rsp;
@@ -101,7 +96,9 @@ function f(method = 'GET', url = '/', data = null, opts = {}) {
 
 export default function somnia(url, opts) {
 	url = String(url);
-	opts = defaults(opts, {});
+	opts = defaults(opts, {
+		fetch: typeof window != 'undefined' ? window.fetch : null,
+	});
 
 	var _ = function (u, o) {
 		// Extend parameters with previous ones
