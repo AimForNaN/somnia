@@ -3,6 +3,9 @@
 	"version": "0.0.4",
 	"type": "module",
 	"main": "./dist/somnia.js",
+	"engines": {
+		"node": ">=16"
+	},
 	"files": [
 		"dist/*"
 	],
