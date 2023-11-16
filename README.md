@@ -65,7 +65,17 @@ somnia('/posts')
 });
 ```
 
+Options are inherited:
+
 ```javascript
 var posts = somnia('/blog/posts', fetchOptions);
 var comments = posts('1/comments'); // Will inherit fetchOptions
+```
+
+Provide your own drop-in replacement for `fetch`:
+
+```javascript
+import fetch from 'node-fetch';
+
+var blog = somnia('/blog', { fetch });
 ```
