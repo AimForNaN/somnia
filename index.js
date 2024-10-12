@@ -25,8 +25,7 @@ function getContentTypeFromData(data) {
 function isJson(headers) {
 	if (headers.has('content-type')) {
 		let ctype = headers.get('content-type');
-		ctype = ctype.split(', ');
-		return ctype.includes('application/json');
+		return typeof ctype == 'string' && ctype.includes('application/json');
 	}
 	return false;
 }
